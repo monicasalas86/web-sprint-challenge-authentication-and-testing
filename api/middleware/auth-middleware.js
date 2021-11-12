@@ -17,7 +17,7 @@ const checkBody = (req, res, next) => {
   next()
 }
 
-const checkUsername = async (req, res, next) => {
+const checkUsernameFree = async (req, res, next) => {
   try {
     const {username} = req.body
     const existingUsername = await Users.findBy({username}).first()
@@ -35,7 +35,27 @@ const checkUsername = async (req, res, next) => {
   }
 }
 
+const checkExistingUsername = async (req, res, next) => {
+  try {
+    const {username} = req.body
+    const existingUsername = await Users.findBy({username}).first()
+
+    if(!existingUsername) {
+      next({
+        status: 401,
+        message: 'invalid credentials'
+      })
+    } else {
+      req.user = existingUsername
+      next()
+    }
+  } catch (error) {
+    next(error)
+  }
+}
+
 module.exports = {
   checkBody,
-  checkUsername
+  checkUsernameFree,
+  checkExistingUsername
 }
