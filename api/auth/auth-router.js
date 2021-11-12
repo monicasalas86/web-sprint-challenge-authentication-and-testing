@@ -7,6 +7,12 @@ router.post('/register', (req, res, next) => {
   const hash = bcrypt.hashSync(user.password, 6)
   user.password = hash
 
+  Users.add(user)
+    .then((newUser) => {
+      res.status(201).json(newUser)
+    })
+    .catch(next)
+
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
