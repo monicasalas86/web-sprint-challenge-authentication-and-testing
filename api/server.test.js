@@ -32,3 +32,35 @@ describe('[POST] api/auth/register', () => {
     expect(users).toHaveLength(1)
   })
 })
+
+describe('[POST] api/auth/login', () => {
+  let res
+  beforeEach(async () => {
+    res = await request(server)
+      .post('/api/auth/register')
+      .send({username: 'foobar', password: '1234'})
+  })
+
+  it('responds with correct username', async () => {
+    await request(server)
+      .post('/api/auth/login')
+      .send({username: 'foobar', password: '1234'})
+    expect(res.body.username).toContain('foobar')
+  })
+})
+
+describe('[POST] api/auth/login', () => {
+  let res
+  beforeEach(async () => {
+    res = await request(server)
+      .post('/api/auth/register')
+      .send({username: 'ladygaga', password: '1234'})
+  })
+
+  it('responds with correct status', async () => {
+    await request(server)
+      .post('/api/auth/login')
+      .send({username: 'ladygaga', password: '1234'})
+    expect(res.status).toBe(201)
+  })
+})
